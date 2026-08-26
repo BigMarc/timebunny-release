@@ -58,16 +58,22 @@ jobs:
 
       # Same gate as the private repo's release workflow: an agent baked against localhost looks
       # perfectly healthy in CI and is simply never heard from once someone installs it.
+      # Deliberately not findstr: it reads a leading `/` in a path as a switch prefix, so
+      # `src-tauri/target/...` fails with "Cannot open" and exits 2 — which reads as "string not
+      # found" and would let a localhost build sail through the check that exists to stop it.
       - name: Verify the baked server URL
         working-directory: apps/agent
         run: |
-          $exe = "src-tauri/target/release/timebunny-agent.exe"
-          & findstr /C:"http://localhost:3000" $exe > $null
-          if ($LASTEXITCODE -eq 0) {
+          $exe = Join-Path $PWD "src-tauri\target\release\timebunny-agent.exe"
+          if (-not (Test-Path $exe)) { throw "No agent binary at $exe" }
+          $text = [System.Text.Encoding]::ASCII.GetString([System.IO.File]::ReadAllBytes($exe))
+          if ($text.Contains("http://localhost:3000")) {
             throw "Agent binary still carries the localhost fallback - TIMEBUNNY_API_URL was not set at build time"
           }
-          & findstr /C:"https://time.bunny.team" $exe > $null
-          if ($LASTEXITCODE -ne 0) { throw "Agent binary does not contain the production API URL" }
+          if (-not $text.Contains("https://time.bunny.team")) {
+            throw "Agent binary does not contain the production API URL"
+          }
+          Write-Host "ok: production URL baked, no localhost fallback"
 
       - name: Checksum
         working-directory: apps/agent
