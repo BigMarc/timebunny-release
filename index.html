@@ -1,0 +1,243 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Download TimeBunny</title>
+<meta name="description" content="Download the TimeBunny desktop agent for macOS and Windows.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🐰</text></svg>">
+<style>
+  :root {
+    --brand: #d4456a; --brand-hover: #bf3a5c; --brand-pale: #ffe4e6;
+    --bg: #fafaf8; --bg-subtle: #f5f2ee; --surface: #ffffff; --border: #e8e4df;
+    --heading: #101828; --body: #1e2939; --muted: #4a5565;
+    --success: #7fb685; --warning: #d4a853;
+    --radius: 0.75rem;
+    --shadow: 0 2px 12px rgb(0 0 0 / 0.06);
+    --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #0d0d1a; --bg-subtle: #1a1a2e; --surface: #1a1a2e; --border: #2d2d44;
+      --heading: #f5f2ee; --body: #e2e0dd; --muted: #9aa0ab; --brand-pale: #3d1520;
+      --shadow: 0 2px 12px rgb(0 0 0 / 0.4);
+    }
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; background: var(--bg); color: var(--body);
+    font-family: "Inter", ui-sans-serif, system-ui, -apple-system, sans-serif;
+    line-height: 1.6; -webkit-font-smoothing: antialiased;
+  }
+  .wrap { max-width: 52rem; margin: 0 auto; padding: 3.5rem 1.25rem 5rem; }
+  header { text-align: center; margin-bottom: 3rem; }
+  .logo { font-size: 3rem; line-height: 1; }
+  h1 {
+    font-family: "DM Sans", ui-sans-serif, system-ui, sans-serif;
+    font-size: clamp(2rem, 5vw, 2.75rem); color: var(--heading);
+    margin: 0.5rem 0 0.25rem; letter-spacing: -0.02em;
+  }
+  .tagline { color: var(--muted); margin: 0; font-size: 1.05rem; }
+  .version {
+    display: inline-block; margin-top: 1rem; padding: 0.2rem 0.7rem;
+    background: var(--brand-pale); color: var(--brand); border-radius: 999px;
+    font-size: 0.8rem; font-weight: 600; font-family: var(--mono);
+  }
+  @media (prefers-color-scheme: dark) { .version { color: #ff8fa8; } }
+
+  .cards { display: grid; gap: 1.25rem; grid-template-columns: repeat(auto-fit, minmax(19rem, 1fr)); }
+  .card {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: var(--radius); padding: 1.5rem; box-shadow: var(--shadow);
+    display: flex; flex-direction: column;
+  }
+  .card.recommended { border-color: var(--brand); border-width: 2px; }
+  .card h2 {
+    font-family: "DM Sans", ui-sans-serif, system-ui, sans-serif;
+    font-size: 1.2rem; color: var(--heading); margin: 0 0 0.15rem;
+    display: flex; align-items: center; gap: 0.5rem;
+  }
+  .yours {
+    font-size: 0.65rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase;
+    background: var(--brand); color: #fff; padding: 0.15rem 0.45rem; border-radius: 4px;
+  }
+  .meta { color: var(--muted); font-size: 0.85rem; margin: 0 0 1.1rem; }
+  .btn {
+    display: block; text-align: center; text-decoration: none;
+    background: var(--brand); color: #fff; font-weight: 600;
+    padding: 0.7rem 1rem; border-radius: 0.5rem; margin-top: auto;
+    transition: background 150ms cubic-bezier(0,0,.2,1);
+  }
+  .btn:hover { background: var(--brand-hover); }
+  .btn.secondary { background: transparent; color: var(--brand); border: 1px solid var(--border); }
+  .btn.secondary:hover { background: var(--bg-subtle); }
+  @media (prefers-color-scheme: dark) { .btn.secondary { color: #ff8fa8; } }
+
+  .note {
+    font-size: 0.82rem; color: var(--muted); margin: 0.85rem 0 0;
+    padding-left: 1.4rem; position: relative;
+  }
+  .note::before { position: absolute; left: 0; top: 0; }
+  .note.ok::before { content: "✓"; color: var(--success); font-weight: 700; }
+  .note.warn::before { content: "!"; color: var(--warning); font-weight: 700; }
+
+  section { margin-top: 3rem; }
+  h3 {
+    font-family: "DM Sans", ui-sans-serif, system-ui, sans-serif;
+    font-size: 1.05rem; color: var(--heading); margin: 0 0 0.75rem;
+  }
+  ol, ul { padding-left: 1.25rem; margin: 0 0 1rem; }
+  li { margin-bottom: 0.4rem; }
+  code, pre {
+    font-family: var(--mono); font-size: 0.82rem;
+    background: var(--bg-subtle); border: 1px solid var(--border);
+    border-radius: 6px;
+  }
+  code { padding: 0.1rem 0.35rem; }
+  pre { padding: 0.85rem 1rem; overflow-x: auto; }
+  pre code { background: none; border: none; padding: 0; }
+  .sha { word-break: break-all; font-size: 0.72rem; color: var(--muted); margin-top: 0.6rem; }
+  details { margin-top: 0.5rem; }
+  summary { cursor: pointer; color: var(--muted); font-size: 0.85rem; }
+  footer {
+    margin-top: 3.5rem; padding-top: 1.5rem; border-top: 1px solid var(--border);
+    text-align: center; color: var(--muted); font-size: 0.82rem;
+  }
+  footer a { color: var(--muted); }
+  a { color: var(--brand); }
+  @media (prefers-color-scheme: dark) { a { color: #ff8fa8; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <div class="logo">🐰</div>
+    <h1>TimeBunny</h1>
+    <p class="tagline">The desktop agent that records the hours you choose to track.</p>
+    <span class="version" id="version">loading…</span>
+  </header>
+
+  <div class="cards" id="cards">
+    <div class="card" id="card-macos">
+      <h2>macOS <span class="yours" id="yours-macos" hidden>Your system</span></h2>
+      <p class="meta" id="meta-macos">Universal — Apple silicon &amp; Intel</p>
+      <a class="btn" id="dl-macos" href="https://github.com/BigMarc/timebunny-release/releases/latest">Download for macOS</a>
+      <p class="note ok">Signed and notarised by Apple. Opens without a Gatekeeper warning.</p>
+      <p class="sha" id="sha-macos"></p>
+    </div>
+
+    <div class="card" id="card-windows">
+      <h2>Windows <span class="yours" id="yours-windows" hidden>Your system</span></h2>
+      <p class="meta" id="meta-windows">64-bit — Windows 10 and 11</p>
+      <a class="btn" id="dl-windows" href="https://github.com/BigMarc/timebunny-release/releases/latest">Download for Windows</a>
+      <p class="note warn">Not yet code-signed. Windows will show <em>“Windows protected your PC”</em> — click <strong>More info → Run anyway</strong>. Check the SHA-256 below if you want to be sure.</p>
+      <p class="sha" id="sha-windows"></p>
+    </div>
+  </div>
+
+  <section>
+    <h3>Installing on macOS</h3>
+    <ol>
+      <li>Open the <code>.dmg</code> and drag <strong>TimeBunny</strong> into <strong>Applications</strong>.</li>
+      <li>Launch it. On first run macOS asks for <strong>Screen Recording</strong>, <strong>Accessibility</strong> and <strong>Input Monitoring</strong> — TimeBunny needs all three to record activity while a shift is running.</li>
+      <li>Grant them in <em>System Settings → Privacy &amp; Security</em>, then quit and reopen TimeBunny so the permissions take effect.</li>
+      <li>Sign in with your Bunny Agency account.</li>
+    </ol>
+  </section>
+
+  <section>
+    <h3>Installing on Windows</h3>
+    <ol>
+      <li>Run the <code>.exe</code>. SmartScreen will warn that the publisher is unknown — that is expected until the installer is code-signed. Choose <strong>More info → Run anyway</strong>.</li>
+      <li>The installer sets TimeBunny up for the current user; no administrator rights are needed.</li>
+      <li>Sign in with your Bunny Agency account.</li>
+    </ol>
+  </section>
+
+  <section>
+    <h3>Verifying your download</h3>
+    <p>Every installer's SHA-256 is printed on its card above. To check what you downloaded:</p>
+    <pre><code># macOS
+shasum -a 256 ~/Downloads/TimeBunny_*.dmg
+
+# Windows (PowerShell)
+Get-FileHash -Algorithm SHA256 $HOME\Downloads\TimeBunny_*-setup.exe</code></pre>
+    <p>On macOS you can also confirm Apple's notarisation directly:</p>
+    <pre><code>spctl -a -vvv /Applications/TimeBunny.app
+# expect: accepted / source=Notarized Developer ID</code></pre>
+  </section>
+
+  <section>
+    <h3>What TimeBunny records</h3>
+    <p>
+      It tracks only while you have a shift running, and what it records is immutable — you cannot
+      edit, blur or delete your own tracked data, and neither can anyone else without leaving an
+      audit trail. See the
+      <a href="https://github.com/BigMarc/timebunny-release#privacy">privacy summary</a>
+      for the details.
+    </p>
+  </section>
+
+  <footer>
+    <p>
+      <a href="https://github.com/BigMarc/timebunny-release/releases">All releases</a> ·
+      Problems? Message the team in Slack.
+    </p>
+    <p>© Bunny Agency</p>
+  </footer>
+
+</div>
+
+<script>
+(function () {
+  var REPO = "BigMarc/timebunny-release";
+  var byId = function (id) { return document.getElementById(id); };
+
+  // Highlight the visitor's platform. navigator.userAgentData is Chromium-only; the UA string
+  // fallback is enough for a two-platform page.
+  var ua = navigator.userAgent;
+  var platform = /Win/i.test(ua) ? "windows" : /Mac/i.test(ua) ? "macos" : null;
+  if (platform) {
+    byId("yours-" + platform).hidden = false;
+    byId("card-" + platform).classList.add("recommended");
+    var other = platform === "windows" ? "macos" : "windows";
+    byId("dl-" + other).classList.add("secondary");
+    byId("cards").prepend(byId("card-" + platform));
+  }
+
+  function human(bytes) {
+    return bytes ? (bytes / 1048576).toFixed(1) + " MB" : "";
+  }
+
+  // Read the newest release straight from the API so this page never needs editing when a new
+  // version ships. Unauthenticated calls are rate-limited to 60/hour per IP; on failure the
+  // buttons keep their static hrefs, which already point at /releases/latest.
+  fetch("https://api.github.com/repos/" + REPO + "/releases/latest")
+    .then(function (r) { if (!r.ok) throw new Error(r.status); return r.json(); })
+    .then(function (rel) {
+      byId("version").textContent = rel.tag_name;
+
+      rel.assets.forEach(function (a) {
+        var os = /\.dmg$/i.test(a.name) ? "macos"
+               : /\.exe$/i.test(a.name) ? "windows"
+               : null;
+        if (!os) return;
+
+        byId("dl-" + os).href = a.browser_download_url;
+        var meta = byId("meta-" + os);
+        meta.textContent = meta.textContent + " · " + human(a.size);
+
+        // `digest` is "sha256:<hex>" on releases created recently; older ones omit it.
+        if (a.digest && a.digest.indexOf("sha256:") === 0) {
+          byId("sha-" + os).textContent = "SHA-256 " + a.digest.slice(7);
+        }
+      });
+    })
+    .catch(function () {
+      byId("version").textContent = "latest";
+    });
+})();
+</script>
+</body>
+</html>

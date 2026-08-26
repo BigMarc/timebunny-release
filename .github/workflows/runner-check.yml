@@ -1,7 +1,0 @@
-name: runner-check
-on: workflow_dispatch
-jobs:
-  win:
-    runs-on: windows-latest
-    steps:
-      - run: echo "windows runner available"
