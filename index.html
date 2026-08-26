@@ -71,6 +71,13 @@
   .btn:hover { background: var(--brand-hover); }
   .btn.secondary { background: transparent; color: var(--brand); border: 1px solid var(--border); }
   .btn.secondary:hover { background: var(--bg-subtle); }
+  .btn.unavailable {
+    background: var(--bg-subtle); color: var(--muted); border: 1px dashed var(--border);
+    cursor: default;
+  }
+  .btn.unavailable:hover { background: var(--bg-subtle); }
+  .card.pending { opacity: 0.72; }
+  .card.pending.recommended { opacity: 1; }
   @media (prefers-color-scheme: dark) { .btn.secondary { color: #ff8fa8; } }
 
   .note {
@@ -218,11 +225,13 @@ Get-FileHash -Algorithm SHA256 $HOME\Downloads\TimeBunny_*-setup.exe</code></pre
     .then(function (rel) {
       byId("version").textContent = rel.tag_name;
 
+      var found = {};
       rel.assets.forEach(function (a) {
         var os = /\.dmg$/i.test(a.name) ? "macos"
                : /\.exe$/i.test(a.name) ? "windows"
                : null;
         if (!os) return;
+        found[os] = true;
 
         byId("dl-" + os).href = a.browser_download_url;
         var meta = byId("meta-" + os);
@@ -232,6 +241,18 @@ Get-FileHash -Algorithm SHA256 $HOME\Downloads\TimeBunny_*-setup.exe</code></pre
         if (a.digest && a.digest.indexOf("sha256:") === 0) {
           byId("sha-" + os).textContent = "SHA-256 " + a.digest.slice(7);
         }
+      });
+
+      // A release that carries no installer for a platform must not offer a button that quietly
+      // lands the visitor on a release page with nothing for them. Reverts by itself as soon as
+      // the asset is attached.
+      ["macos", "windows"].forEach(function (os) {
+        if (found[os]) return;
+        var btn = byId("dl-" + os);
+        btn.textContent = "Not available yet";
+        btn.removeAttribute("href");
+        btn.classList.add("unavailable");
+        byId("card-" + os).classList.add("pending");
       });
     })
     .catch(function () {
