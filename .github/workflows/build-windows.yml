@@ -1,0 +1,89 @@
+name: Build Windows installer
+
+# The agent's source lives in a private repository whose Actions are currently billing-blocked.
+# This repository is public, so its runner minutes are free — it checks the source out with a
+# read-only deploy key and attaches the resulting installer to a release here.
+#
+# The installer is UNSIGNED: no Windows code-signing certificate exists yet. Once one does, the
+# private repo's `release-agent.yml` is the proper home for this and this workflow should go.
+#
+# Note that this repository is public and so are these logs. Keep build output out of them if a
+# step would ever echo source.
+on:
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: "Release tag to attach the installer to"
+        required: true
+        default: "v0.1.0"
+      ref:
+        description: "Branch or tag of the source repo to build"
+        required: true
+        default: "main"
+
+permissions:
+  contents: write # attaching the installer to this repo's release
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - name: Check out agent source
+        uses: actions/checkout@v4
+        with:
+          repository: BigMarc/TimeBunny
+          ref: ${{ inputs.ref }}
+          ssh-key: ${{ secrets.SOURCE_DEPLOY_KEY }}
+          persist-credentials: false
+
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: ".nvmrc"
+          cache: "pnpm"
+      - uses: dtolnay/rust-toolchain@stable
+      - uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: apps/agent/src-tauri
+      - run: pnpm install --frozen-lockfile
+
+      # tauri.conf.json does not set `createUpdaterArtifacts`, so no updater bundle is produced and
+      # the minisign key is not needed here. These installers are served from GitHub Releases.
+      - name: Build NSIS installer
+        working-directory: apps/agent
+        env:
+          TIMEBUNNY_API_URL: https://time.bunny.team
+          TIMEBUNNY_CHANNEL: stable
+        run: pnpm tauri build --bundles nsis
+
+      # Same gate as the private repo's release workflow: an agent baked against localhost looks
+      # perfectly healthy in CI and is simply never heard from once someone installs it.
+      - name: Verify the baked server URL
+        working-directory: apps/agent
+        run: |
+          $exe = "src-tauri/target/release/timebunny-agent.exe"
+          & findstr /C:"http://localhost:3000" $exe > $null
+          if ($LASTEXITCODE -eq 0) {
+            throw "Agent binary still carries the localhost fallback - TIMEBUNNY_API_URL was not set at build time"
+          }
+          & findstr /C:"https://time.bunny.team" $exe > $null
+          if ($LASTEXITCODE -ne 0) { throw "Agent binary does not contain the production API URL" }
+
+      - name: Checksum
+        working-directory: apps/agent
+        run: Get-ChildItem -Recurse -Filter *.exe src-tauri/target/release/bundle/nsis | Get-FileHash -Algorithm SHA256 | Format-List
+
+      - name: Attach installer to release
+        working-directory: apps/agent
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          $exe = Get-ChildItem -Recurse -Filter *.exe src-tauri/target/release/bundle/nsis | Select-Object -First 1
+          if (-not $exe) { throw "No NSIS installer was produced" }
+          gh release upload ${{ inputs.tag }} $exe.FullName --clobber --repo ${{ github.repository }}
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: windows-nsis-unsigned
+          path: apps/agent/src-tauri/target/release/bundle/nsis/*.exe
+          if-no-files-found: error
