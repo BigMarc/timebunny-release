@@ -56,7 +56,9 @@ jobs:
         env:
           TIMEBUNNY_API_URL: https://time.bunny.team
           TIMEBUNNY_CHANNEL: stable
-        run: pnpm tauri build --bundles nsis --config '{\"bundle\":{\"createUpdaterArtifacts\":false}}'
+        run: >-
+          pnpm tauri build --bundles nsis
+          --config "{\"bundle\":{\"createUpdaterArtifacts\":false}}"
 
       # Same gate as the private repo's release workflow: an agent baked against localhost looks
       # perfectly healthy in CI and is simply never heard from once someone installs it.
