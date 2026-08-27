@@ -47,14 +47,16 @@ jobs:
           workspaces: apps/agent/src-tauri
       - run: pnpm install --frozen-lockfile
 
-      # tauri.conf.json does not set `createUpdaterArtifacts`, so no updater bundle is produced and
-      # the minisign key is not needed here. These installers are served from GitHub Releases.
+      # tauri.conf.json now sets `createUpdaterArtifacts`, which makes TAURI_SIGNING_PRIVATE_KEY
+      # mandatory — and that key deliberately does not live in this public repository. Turn the
+      # updater bundle back off for this job: it ships installers via GitHub Releases, and the
+      # signed updater manifest is release-agent.yml's job in the private repo.
       - name: Build NSIS installer
         working-directory: apps/agent
         env:
           TIMEBUNNY_API_URL: https://time.bunny.team
           TIMEBUNNY_CHANNEL: stable
-        run: pnpm tauri build --bundles nsis
+        run: pnpm tauri build --bundles nsis --config '{\"bundle\":{\"createUpdaterArtifacts\":false}}'
 
       # Same gate as the private repo's release workflow: an agent baked against localhost looks
       # perfectly healthy in CI and is simply never heard from once someone installs it.
