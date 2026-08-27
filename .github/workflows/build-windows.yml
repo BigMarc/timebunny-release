@@ -56,9 +56,11 @@ jobs:
         env:
           TIMEBUNNY_API_URL: https://time.bunny.team
           TIMEBUNNY_CHANNEL: stable
-        run: >-
-          pnpm tauri build --bundles nsis
-          --config "{\"bundle\":{\"createUpdaterArtifacts\":false}}"
+        # `--config` takes a path as well as a literal, and a path is the only form that survives
+        # this trip: pwsh and pnpm between them turned an inline `{\"bundle\":...}` into `{\`.
+        run: |
+          [System.IO.File]::WriteAllText("$PWD\no-updater.json", '{"bundle":{"createUpdaterArtifacts":false}}')
+          pnpm tauri build --bundles nsis --config no-updater.json
 
       # Same gate as the private repo's release workflow: an agent baked against localhost looks
       # perfectly healthy in CI and is simply never heard from once someone installs it.
