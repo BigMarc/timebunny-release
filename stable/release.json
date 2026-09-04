@@ -1,10 +1,10 @@
 {
   "version": "0.2.0",
   "channel": "stable",
-  "pub_date": "2026-09-04T10:10:11Z",
+  "pub_date": "2026-09-04T10:14:52Z",
   "notes_url": "https://github.com/BigMarc/timebunny-release/releases/tag/v0.2.0",
   "installers": {
-    "macos": { "url": "https://github.com/BigMarc/timebunny-release/releases/download/v0.2.0/TimeBunny_0.2.0_universal.dmg", "filename": "TimeBunny_0.2.0_universal.dmg", "sha256": "65ea4e660e6a9c65a78b7b11f61675b3ba7c7f5d12a5950eddaea5eda03739cf", "bytes": 8344166 },
+    "macos": { "url": "https://github.com/BigMarc/timebunny-release/releases/download/v0.2.0/TimeBunny_0.2.0_universal.dmg", "filename": "TimeBunny_0.2.0_universal.dmg", "sha256": "3724cb4885980b6b24165d85b16a68042586e046136a86be396039bf3d0ee777", "bytes": 8345877 },
     "windows": { "url": "https://github.com/BigMarc/timebunny-release/releases/download/v0.2.0/TimeBunny_0.2.0_x64-setup.exe", "filename": "TimeBunny_0.2.0_x64-setup.exe", "sha256": "69d964507e344ce3aa3c3e13b381dfb2b8ac61f4de2d6bc2affead010827d6d4", "bytes": 3251804 }
   }
 }
