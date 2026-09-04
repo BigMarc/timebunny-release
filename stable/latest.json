@@ -1,0 +1,10 @@
+{
+  "version": "0.2.0",
+  "notes": "See https://github.com/BigMarc/timebunny-release/releases/tag/v0.2.0",
+  "pub_date": "2026-09-04T10:10:11Z",
+  "platforms": {
+    "darwin-aarch64": { "signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVTKzZFeGphbDV6UGJnYnhwM0l0UjdDYVgwdVNqdjlVZzVJeTYwVS90d0tmRTVLRXM3K2RCZ3V0bUVDV3AvWHY4MS9KeUlzYyttSS9hM04vb3NSZVJRZUQrK1BOMm1ZUGdFPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNzg4NTE2MjQ2CWZpbGU6VGltZUJ1bm55LmFwcC50YXIuZ3oKRmE4REFUdHZhbGxyN2V4djhOblZqQjNURXJrd2RxVlJwNVVUeCtLMGRLa1grV2c1K045Z2NVTW5WUFJTeldtTW9RN3Vqd24zL3BJQTBwV2YzK2tZQkE9PQo=", "url": "https://github.com/BigMarc/timebunny-release/releases/download/v0.2.0/TimeBunny.app.tar.gz" },
+    "darwin-x86_64": { "signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVTKzZFeGphbDV6UGJnYnhwM0l0UjdDYVgwdVNqdjlVZzVJeTYwVS90d0tmRTVLRXM3K2RCZ3V0bUVDV3AvWHY4MS9KeUlzYyttSS9hM04vb3NSZVJRZUQrK1BOMm1ZUGdFPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNzg4NTE2MjQ2CWZpbGU6VGltZUJ1bm55LmFwcC50YXIuZ3oKRmE4REFUdHZhbGxyN2V4djhOblZqQjNURXJrd2RxVlJwNVVUeCtLMGRLa1grV2c1K045Z2NVTW5WUFJTeldtTW9RN3Vqd24zL3BJQTBwV2YzK2tZQkE9PQo=", "url": "https://github.com/BigMarc/timebunny-release/releases/download/v0.2.0/TimeBunny.app.tar.gz" },
+    "windows-x86_64": { "signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVTKzZFeGphbDV6UFFhOUZMV0xKT1ZMUEtaZkdXMVA5Nmt2Titwbm9ORVd5dFlGSG9XRStWNVlLaGtZVWtwZlVtY203WXJObDNyKzErazI5MzBaQlgyQ0hGYWpOY1daVkFNPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNzg4NTE2NTI3CWZpbGU6VGltZUJ1bm55XzAuMi4wX3g2NC1zZXR1cC5leGUKODdQZnZzeXNjU21ZOURrSHN6bTRDN01WRmRWWk0rbU14ZTZJVHVIejQyMEJ2eUFiOTg1SU5ocTlBUWZWZW1jZzNKNXo0ZE5OaUt5VktGZW1LRFFZQUE9PQo=", "url": "https://github.com/BigMarc/timebunny-release/releases/download/v0.2.0/TimeBunny_0.2.0_x64-setup.exe" }
+  }
+}
